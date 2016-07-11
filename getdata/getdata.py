@@ -54,4 +54,4 @@ class GetData():
 if __name__ == '__main__':
     gdata = GetData()
     api_list, clss_list, md5_list = gdata.getapidata(10)
-    print api_list
+    print clss_list
