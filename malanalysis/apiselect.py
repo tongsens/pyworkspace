@@ -116,6 +116,21 @@ class Tcount():
                 count += 1
         return count
 
+def getapidraw(vocablist, setlist, clss_list):
+    while True:
+        api_name = raw_input("api name:")
+        idx = vocablist.index(api_name)
+        good_list = []
+        bad_list = []
+        for j,clss in enumerate(clss_list):
+            if clss==0:
+                good_list.append(setlist[j][idx])
+            else:
+                bad_list.append(setlist[j][idx])
+        drawpic(good_list, bad_list, api_name)
+        drawbar(good_list, bad_list, api_name)
+
+
 def apicount(vocablist, setlist, clss_list):
     ret_dict = {}
     for i,api in enumerate(vocablist):
@@ -203,4 +218,4 @@ if __name__ == '__main__':
     setlist = []
     for x in api_list:
         setlist.append(setOfWords2Vec(vocablist, x))
-    apicount(vocablist, setlist, clss_list)
+    getapidraw(vocablist, setlist, clss_list)

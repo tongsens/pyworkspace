@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import numpy as np
+import pymongo
 
 def createVocabList(dataSet):
     vocabSet = set([])  #create empty set
@@ -69,5 +70,8 @@ def bayers(vocablist, setlist, clss_list):
 
 
 if __name__ == '__main__':
-    vocablist, setlist, clss_list = load_data(1000)
-    bayers(vocablist,setlist,clss_list)
+    #vocablist, setlist, clss_list = load_data(1000)
+    #bayers(vocablist,setlist,clss_list)
+    db = pymongo.MongoClient(host='127.0.0.1', port=27017)
+    xx = db.cuckoo.analysis
+    print xx.count()
