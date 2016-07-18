@@ -56,7 +56,7 @@ def apriori(dataSet, minSupport = 0.4):
     count = 0
     while (len(L[k-2]) > 0):
         print count
-        if count>1:
+        if count>0:
             break
         Ck = aprioriGen(L[k-2], k)
         Lk , supK = scanD(D, Ck, minSupport)
@@ -112,6 +112,6 @@ def calcConf(supData, keyname):
         print data
 
 if __name__ == '__main__':
-    dataset = loadData(100)
+    dataset = loadData(3000)
     L, supportData = apriori(dataset, 0.01)
     calcConf(supportData, u'normal')

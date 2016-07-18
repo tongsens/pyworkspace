@@ -69,6 +69,16 @@ class Tcount():
     def getthreod(self):
         return self.threod
 
+    def countsort(self):
+        sumrate = float(self.badsum)/float(self.badsum+self.goodsum)
+        malrate = float(self.badnzero)/float(self.goodnzero+self.badnzero)
+        return sumrate*malrate, sumrate,malrate,self.badnzero
+
+    def highrate(self):
+        sumrate = float(self.badsum)/float(self.badsum+self.goodsum)
+        malrate = float(self.badnzero)/float(self.goodnzero+self.badnzero)
+        return sumrate-malrate, sumrate,malrate,self.goodmax
+
     def printdata(self):
         print 'badmax:',self.badmax, 'goodmax:',self.goodmax
         print 'badnzero:',self.badnzero,'goodnzero:',self.goodnzero
@@ -130,6 +140,23 @@ def getapidraw(vocablist, setlist, clss_list):
         drawpic(good_list, bad_list, api_name)
         drawbar(good_list, bad_list, api_name)
 
+
+def apisort(vocablist, setlist, clss_list):
+    ret_list = []
+    for i,api in enumerate(vocablist):
+        #print api
+        bad_list = []
+        good_list = []
+        for j,clss in enumerate(clss_list):
+            if clss==0:
+                good_list.append(setlist[j][i])
+            else:
+                bad_list.append(setlist[j][i])
+        th = Tcount(good_list,bad_list)
+        ret_list.append((api, th.highrate()))
+    ret_list.sort(key=lambda f:f[1], reverse=True)
+    for data in ret_list:
+        print data
 
 def apicount(vocablist, setlist, clss_list):
     ret_dict = {}
@@ -219,3 +246,4 @@ if __name__ == '__main__':
     for x in api_list:
         setlist.append(setOfWords2Vec(vocablist, x))
     getapidraw(vocablist, setlist, clss_list)
+    #apisort(vocablist, setlist, clss_list)

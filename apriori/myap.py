@@ -32,12 +32,15 @@ def scanD(subset,D):
             count += 1
     return count
 
-def calcValue(xm, xn, xym, xyn):
-    if xym==0 or xm==0:
-        return 0
-    if xyn==0 or xn==0:
-        return 1
-    return float(xym*xn)/float(xyn*xm)
+######################################################
+
+def calcValue(xm, xn, ym, yn, xym, xyn):
+    x = float(xm)/float(xm+xn)
+    y = float(ym)/float(ym+yn)
+    xy = float(xym)/float(xym+xyn)
+    maxvale = max(x,y)
+    threod = (xy-maxvale)*xym
+    return threod,(xy-maxvale),xy,x,y
 
 def calcNext(starset,api_list ,D):
     M = set([u'malware'])
@@ -50,9 +53,19 @@ def calcNext(starset,api_list ,D):
         for api in api_list:
             xym = xm|api
             xyn = xn|api
+            ym = api|M
+            yn = api|N
+            ym_count = scanD(ym, D)
+            yn_count = scanD(yn, D)
             xym_count = scanD(xym, D)
             xyn_count = scanD(xyn, D)
             xy = ss|api
+            xy_count = scanD(xy, D)
+            if xy_count>0:
+                oth = calcValue(xm_count,xn_count,ym_count, yn_count, xym_count,xyn_count)
+                if oth[0]>2.0 and oth[1]>0.1 and oth[2]>0.9:
+                    print xy,oth, xym_count
+        #os.system("pause")
 
 
 def myapriori(dataset, api_list):
@@ -62,8 +75,52 @@ def myapriori(dataset, api_list):
         calcNext(startset, initset, dataset)
         i += 1
 
+##############################################
+
+def genL(apilist, dataset):
+    M = set([u'malware'])
+    N = set([u'normal'])
+    key_list = []
+    for api1 in apilist:
+        for api2 in apilist:
+            key_list.append(api1|api2)
+    key_dict = map(frozenset, key_list)
+    result_dict = {}
+    mal_dict = {}
+    print 'running...'
+    for key in key_dict:
+        subseq = set(key)
+        xm = subseq|M
+        xn = subseq|N
+        xm_count = scanD(xm, dataset)
+        xn_count = scanD(xn, dataset)
+        if (xm_count+xn_count)>0:
+            rate = float(xm_count)/float(xm_count+xn_count)
+        else:
+            rate = 0
+        mal_dict[frozenset(xm)] = xm_count
+        result_dict[key] = rate
+    return result_dict, mal_dict
+
+def calcData(count_dict, dataset, mal_dict):
+    M = set([u'malware'])
+    for data in count_dict.items():
+        key = list(data[0])
+        if data[1] > 0.9 and len(key)==2:
+            x_rate = count_dict[frozenset([key[0]])]
+            y_rate = count_dict[frozenset([key[1]])]
+            maxvalue = max(x_rate, y_rate)
+            grow = data[1]-maxvalue
+            mals_num = mal_dict[frozenset(set(data[0])|M)]
+            if grow>0.1 and mals_num>10:
+                print key, (x_rate, y_rate, grow, data[1], mals_num)
+
+def apriori(dataset, apilist):
+    initset = map(set, [[api] for api in api_list])
+    count_dict,mal_dict = genL(initset, dataset)
+    calcData(count_dict, dataset, mal_dict)
 
 
 if __name__ == '__main__':
-    dataset,api_list = loadData(10)
-    myapriori(dataset, api_list)
+    dataset,api_list = loadData(3000)
+    apriori(dataset, api_list)
