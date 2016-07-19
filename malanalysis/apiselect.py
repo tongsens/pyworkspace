@@ -153,10 +153,14 @@ def apisort(vocablist, setlist, clss_list):
             else:
                 bad_list.append(setlist[j][i])
         th = Tcount(good_list,bad_list)
-        ret_list.append((api, th.highrate()))
-    ret_list.sort(key=lambda f:f[1], reverse=True)
-    for data in ret_list:
-        print data
+        ret_list.append(th.countsort()[0])
+        #ret_list.append((api, th.highrate()))
+    #ret_list.sort(key=lambda f:f[1], reverse=True)
+    #ret_list.sort()
+    narr = np.array(ret_list)
+    df = pd.DataFrame(narr)
+    df.plot()
+    plt.show()
 
 def apicount(vocablist, setlist, clss_list):
     ret_dict = {}
@@ -245,5 +249,5 @@ if __name__ == '__main__':
     setlist = []
     for x in api_list:
         setlist.append(setOfWords2Vec(vocablist, x))
-    getapidraw(vocablist, setlist, clss_list)
-    #apisort(vocablist, setlist, clss_list)
+    #getapidraw(vocablist, setlist, clss_list)
+    apisort(vocablist, setlist, clss_list)
