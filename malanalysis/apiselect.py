@@ -249,5 +249,5 @@ if __name__ == '__main__':
     setlist = []
     for x in api_list:
         setlist.append(setOfWords2Vec(vocablist, x))
-    #getapidraw(vocablist, setlist, clss_list)
-    apisort(vocablist, setlist, clss_list)
+    getapidraw(vocablist, setlist, clss_list)
+    #apisort(vocablist, setlist, clss_list)
