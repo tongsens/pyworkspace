@@ -80,21 +80,26 @@ class analysisApi():
             rate[key] = float(bad_count[key])/float(good_count[key] + bad_count[key])
         return rate
 
-    def sub(self, a, b):
-        return a-b
-
-    def mul(self, a, b):
-        return a*b
-
     #计算贡献值
-    def calcPP(self, type='mul'):
+    def calcPP(self):
         out_list = []
-        if type=='sub':
-            func = self.sub
-        else:
-            func = self.mul
         for key in self.timerate:
-            out_list.append((key,func(self.timerate[key], self.hasrate[key])))
+            out_list.append((key,self.timerate[key]*self.hasrate[key]))
+        out_list.sort(key=lambda f:f[1], reverse=True)
+        list1 = out_list[:150]
+        list2 = out_list[-10:]
+        api_list1 = [data[0] for data in list1]
+        api_list2 = [data[0] for data in list2]
+        api_list1.extend(api_list2)
+        import json
+        with open('../sklearn-test/apilist.txt', 'w') as fp:
+            outbuf = json.dumps(api_list1)
+            fp.write(outbuf)
+
+    def calcPsubP(self):
+        out_list = []
+        for key in self.timerate:
+            out_list.append((key, (self.timerate[key]-self.hasrate[key])*self.bhc[key], self.bhc[key]))
         out_list.sort(key=lambda f:f[1], reverse=True)
         for x in out_list:
             print x
@@ -105,4 +110,4 @@ if __name__ == '__main__':
     dcount = dataCount(api_list, clss_list)
     countdata = dcount.getCountData()
     alysapi = analysisApi(countdata)
-    alysapi.calcPP(type='mal')
+    alysapi.calcPP()
