@@ -1,0 +1,26 @@
+1. ipython pyreadline 一起使用
+
+2. tab键自动完成
+
+3. 内省? 打印基本信息
+   ?? 打印源码等信息
+
+4. %run xxx.py 运行外部脚本，之后脚本中的变量就可以在ipython中使用了
+
+5. %paste 粘帖剪贴板上的东西
+
+6. 其他魔术命令
+   %timeit 查看命令执行时间
+   %reset? 查看命令选项
+   %debug 进入最新异常调试
+   %hist 打印输入历史
+   %pdb 自动进入调试
+   %xdel 删除变量
+
+7. ipython --pylab
+    #pylab 画图模式
+
+8. 快捷键
+   ctrl-R 寻找相似命令
+   _ 保存最近的一个输出
+   __ 保存上两个输出

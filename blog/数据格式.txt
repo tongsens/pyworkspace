@@ -1,0 +1,20 @@
+1. txt<-->json
+文本和json格式之间的转换
+json格式与python中的字典格式相同，即键值对
+    import json
+    #json-->txt
+    jsdata = {'a':1, 'b':2, 'c':3}
+    txtdata = json.dumps(jsdata)
+    #txt-->json
+    json.loads(txtdata)
+
+2. json-->DataFrame
+DataFrame是pandas中的数据结构
+    from pandas import DataFrame
+    records = DataFrame(jsdata)
+
+
+3. ipython --pylab
+#pylab 画图模式
+
+4. ipython 安装pyreadline，合用比较爽
